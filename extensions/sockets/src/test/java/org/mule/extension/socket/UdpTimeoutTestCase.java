@@ -10,11 +10,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import org.mule.extension.socket.api.exceptions.ReadingTimeoutException;
 import org.mule.runtime.core.exception.MessagingException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
-// TODO(pablo.kraan): SPI - fix this test
 public class UdpTimeoutTestCase extends SocketExtensionTestCase {
 
   @Override
