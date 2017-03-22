@@ -147,7 +147,8 @@ public class IsolatedClassLoaderFactory {
     JarInfo testJarInfo = getJarInfo(artifactsUrlClassification);
 
     regionClassLoader.addClassLoader(appClassLoader,
-                                     new DefaultArtifactClassLoaderFilter(testJarInfo.getPackages(), testJarInfo.getResources()));
+                                     new DefaultArtifactClassLoaderFilter("TEST_REGION", testJarInfo.getPackages(),
+                                                                          testJarInfo.getResources()));
 
     for (int i = 0; i < filteredPluginsArtifactClassLoaders.size(); i++) {
       final ArtifactClassLoaderFilter classLoaderFilter = pluginArtifactClassLoaderFilters.get(i);
@@ -230,7 +231,7 @@ public class IsolatedClassLoaderFactory {
     MuleArtifactClassLoader launcherArtifact = createLauncherArtifactClassLoader();
     final List<MuleModule> muleModules = Collections.<MuleModule>emptyList();
     ClassLoaderFilter filteredClassLoaderLauncher = new ContainerClassLoaderFilterFactory()
-        .create(testContainerClassLoaderFactory.getBootPackages(), muleModules);
+        .create("test", testContainerClassLoaderFactory.getBootPackages(), muleModules);
 
     logClassLoaderUrls("CONTAINER", artifactsUrlClassification.getContainerUrls());
     return testContainerClassLoaderFactory

@@ -12,6 +12,7 @@ import static org.mule.runtime.api.util.Preconditions.checkArgument;
 
 import org.mule.runtime.core.util.StringUtils;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,18 +28,20 @@ public class MuleModule {
   private final Set<String> exportedPaths;
   private final Set<String> privilegedExportedPackages;
   private final Set<String> privilegedArtifacts;
+  private final List<ExportedService> exportedServices;
 
   /**
    * Creates a new module
-   *
-   * @param name module name. Not empty.
+   *  @param name module name. Not empty.
    * @param exportedPackages java packages exported by this module. Not null.
    * @param exportedPaths java resources exported by this module. Not null;
    * @param privilegedExportedPackages java packages exported by this module to privileged artifacts only. Not null.
    * @param privilegedArtifacts name of the artifacts with privileged access to the API. Non null.
+   * @param exportedServices
    */
+  // TODO(pablo.kraan): SPI - fix javadoc
   public MuleModule(String name, Set<String> exportedPackages, Set<String> exportedPaths, Set<String> privilegedExportedPackages,
-                    Set<String> privilegedArtifacts) {
+                    Set<String> privilegedArtifacts, List<ExportedService> exportedServices) {
     checkArgument(!StringUtils.isEmpty(name), "name cannot be empty");
     checkArgument(exportedPackages != null, "exportedPackages cannot be null");
     checkArgument(exportedPaths != null, "exportedPaths cannot be null");
@@ -46,11 +49,14 @@ public class MuleModule {
     checkArgument(privilegedArtifacts != null, "privilegedArtifacts cannot be null");
     checkArgument((privilegedArtifacts.isEmpty() && privilegedExportedPackages.isEmpty())
         || (!privilegedArtifacts.isEmpty() && !privilegedExportedPackages.isEmpty()), INVALID_PRIVILEGED_API_DEFINITION_ERROR);
+    // TODO(pablo.kraan): SPI - check arguments
+    // TODO(pablo.kraan): SPI - exproted paths should not contain META-INF/services paths
     this.name = name;
     this.exportedPackages = unmodifiableSet(exportedPackages);
     this.exportedPaths = unmodifiableSet(exportedPaths);
     this.privilegedExportedPackages = privilegedExportedPackages;
     this.privilegedArtifacts = privilegedArtifacts;
+    this.exportedServices = exportedServices;
   }
 
   public String getName() {
@@ -71,5 +77,9 @@ public class MuleModule {
 
   public Set<String> getPrivilegedArtifacts() {
     return privilegedArtifacts;
+  }
+
+  public List<ExportedService> getExportedServices() {
+    return exportedServices;
   }
 }

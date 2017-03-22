@@ -58,8 +58,9 @@ public class TestContainerModuleDiscoverer implements ModuleDiscoverer {
     Set<String> privilegedArtifacts = new HashSet<>(discoveredModule.getPrivilegedArtifacts());
     privilegedArtifacts.addAll(privilegedArtifactIds);
 
+    // TODO(pablo.kraan): SPI - need to pass services
     return new MuleModule(discoveredModule.getName(), discoveredModule.getExportedPackages(),
                           discoveredModule.getExportedPaths(), discoveredModule.getPrivilegedExportedPackages(),
-                          privilegedArtifacts);
+                          privilegedArtifacts, null);
   }
 }

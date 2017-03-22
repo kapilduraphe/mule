@@ -21,7 +21,9 @@ import org.mule.runtime.module.artifact.descriptor.ArtifactDescriptor;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +68,11 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
   @Override
   public URL getResource(String name) {
     if (filter.exportsResource(name)) {
-      return getResourceFromDelegate(artifactClassLoader, name);
+      URL resourceFromDelegate = getResourceFromDelegate(artifactClassLoader, name);
+      System.out.println("Artifact: " + this.getArtifactId() + " true exports: " + name + " : " + resourceFromDelegate);
+      return resourceFromDelegate;
     } else {
+      System.out.println("Artifact: " + this.getArtifactId() + " false exports: " + name);
       logClassloadingTrace(format("Resource '%s' not found in classloader for '%s'.", name, getArtifactId()));
       logClassloadingTrace(format("Filter applied for resource '%s': %s", name, getArtifactId()));
       return null;
@@ -81,8 +86,12 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
   @Override
   public Enumeration<URL> getResources(String name) throws IOException {
     if (filter.exportsResource(name)) {
-      return getResourcesFromDelegate(artifactClassLoader, name);
+      Enumeration<URL> resourcesFromDelegate = getResourcesFromDelegate(artifactClassLoader, name);
+      List<URL> list = Collections.list(resourcesFromDelegate);
+      System.out.println("Artifact: " + this.getArtifactId() + " true exports: " + name + " : " + list);
+      return new EnumerationAdapter<>(list);
     } else {
+      System.out.println("Artifact: " + this.getArtifactId() + " false exports: " + name);
       logClassloadingTrace(format("Resources '%s' not found in classloader for '%s'.", name, getArtifactId()));
       logClassloadingTrace(format("Filter applied for resources '%s': %s", name, getArtifactId()));
       return new EnumerationAdapter<>(emptyList());
@@ -157,6 +166,8 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
 
   @Override
   public URL findLocalResource(String resourceName) {
-    return artifactClassLoader.findLocalResource(resourceName);
+    URL localResource = artifactClassLoader.findLocalResource(resourceName);
+    System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + localResource);
+    return localResource;
   }
 }

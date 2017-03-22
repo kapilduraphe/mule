@@ -28,6 +28,7 @@ public class TestModuleBuilder {
   private Set<String> packages = new HashSet<>();
   private Set<String> resources = new HashSet<>();
 
+  // TODO(pablo.kraan): SPI - need services
   /**
    * Creates a new builder
    *
@@ -72,6 +73,6 @@ public class TestModuleBuilder {
    * @return a new {@link MuleModule} with the configured state.
    */
   public MuleModule build() {
-    return new MuleModule(name, packages, resources, emptySet(), emptySet());
+    return new MuleModule(name, packages, resources, emptySet(), emptySet(), null);
   }
 }

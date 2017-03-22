@@ -34,7 +34,7 @@ public class ContainerClassLoaderFilterFactoryTestCase extends AbstractMuleTestC
     muleModules.add(new TestModuleBuilder("module2").exportingPackages("org.foo2")
         .exportingResources("META-INF/", "/META-INF/docs2").build());
 
-    final ClassLoaderFilter classLoaderFilter = factory.create(Collections.emptySet(), muleModules);
+    final ClassLoaderFilter classLoaderFilter = factory.create(null, Collections.emptySet(), muleModules);
 
     assertThat(classLoaderFilter.exportsClass("org.foo1.Foo"), is(true));
     assertThat(classLoaderFilter.exportsClass("org.foo1.bar.Bar"), is(true));
@@ -53,7 +53,7 @@ public class ContainerClassLoaderFilterFactoryTestCase extends AbstractMuleTestC
     final List<MuleModule> muleModules = new ArrayList<>();
     final Set<String> bootPackages = singleton("org.foo1");
 
-    final ClassLoaderFilter classLoaderFilter = factory.create(bootPackages, muleModules);
+    final ClassLoaderFilter classLoaderFilter = factory.create(null, bootPackages, muleModules);
 
     assertThat(classLoaderFilter.exportsClass("org.foo1.Foo"), is(true));
     assertThat(classLoaderFilter.exportsClass("org.foo1.bar.Bar"), is(true));

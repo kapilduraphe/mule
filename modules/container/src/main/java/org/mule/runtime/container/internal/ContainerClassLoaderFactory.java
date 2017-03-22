@@ -193,7 +193,8 @@ public class ContainerClassLoaderFactory {
   protected FilteringArtifactClassLoader createContainerFilteringClassLoader(List<MuleModule> muleModules,
                                                                              ArtifactClassLoader containerClassLoader) {
     return new FilteringContainerClassLoader(containerClassLoader,
-                                             new ContainerClassLoaderFilterFactory().create(getBootPackages(), muleModules));
+                                             new ContainerClassLoaderFilterFactory().create("CONTAINER", getBootPackages(),
+                                                                                            muleModules));
   }
 
   /**

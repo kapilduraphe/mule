@@ -21,7 +21,7 @@ import org.junit.Test;
 public class DefaultArtifactClassLoaderFilterTestCase extends AbstractMuleTestCase {
 
   private ArtifactClassLoaderFilter filter =
-      new DefaultArtifactClassLoaderFilter(singleton("java.lang"), singleton("META-INF/schema.xsd"));
+      new DefaultArtifactClassLoaderFilter(null, singleton("java.lang"), singleton("META-INF/schema.xsd"));
 
   @Test
   public void filtersClassWhenPackageNotExported() throws Exception {

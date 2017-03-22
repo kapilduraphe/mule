@@ -23,14 +23,15 @@ import org.junit.Test;
 
 public class CompositeModuleDiscovererTestCase extends AbstractMuleTestCase {
 
+  // TODO(pablo.kraan): SPI - check these tests
   @Test
   public void delegatesToComposedDiscovers() throws Exception {
     final ModuleDiscoverer discoverer1 = mock(ModuleDiscoverer.class);
-    MuleModule module1 = new MuleModule("module1", emptySet(), emptySet(), emptySet(), emptySet());
+    MuleModule module1 = new MuleModule("module1", emptySet(), emptySet(), emptySet(), emptySet(), null);
     final List<MuleModule> modules1 = new ArrayList<>();
     modules1.add(module1);
     when(discoverer1.discover()).thenReturn(modules1);
-    MuleModule module2 = new MuleModule("module1", emptySet(), emptySet(), emptySet(), emptySet());
+    MuleModule module2 = new MuleModule("module1", emptySet(), emptySet(), emptySet(), emptySet(), null);
     final List<MuleModule> modules2 = new ArrayList<>();
     modules2.add(module2);
     final ModuleDiscoverer discoverer2 = mock(ModuleDiscoverer.class);

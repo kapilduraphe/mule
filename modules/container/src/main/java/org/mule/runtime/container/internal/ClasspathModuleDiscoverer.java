@@ -65,7 +65,8 @@ public class ClasspathModuleDiscoverer implements ModuleDiscoverer {
         getExportedPackageByProperty(moduleProperties, PRIVILEGED_EXPORTED_CLASS_PACKAGES_PROPERTY);
     Set<String> privilegedArtifacts = getPrivilegedArtifactIds(moduleProperties);
 
-    return new MuleModule(moduleName, modulePackages, modulePaths, modulePrivilegedPackages, privilegedArtifacts);
+    // TODO(pablo.kraan): SPI - read the module's services
+    return new MuleModule(moduleName, modulePackages, modulePaths, modulePrivilegedPackages, privilegedArtifacts, null);
   }
 
   private Set<String> getPrivilegedArtifactIds(Properties moduleProperties) {

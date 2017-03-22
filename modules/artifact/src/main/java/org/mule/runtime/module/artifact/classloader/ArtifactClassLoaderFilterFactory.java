@@ -27,7 +27,7 @@ public class ArtifactClassLoaderFilterFactory implements ClassLoaderFilterFactor
     if (exportedArtifactPackages.isEmpty() && exportedArtifactResources.isEmpty()) {
       return DefaultArtifactClassLoaderFilter.NULL_CLASSLOADER_FILTER;
     } else {
-      return new DefaultArtifactClassLoaderFilter(exportedArtifactPackages, exportedArtifactResources);
+      return new DefaultArtifactClassLoaderFilter(null, exportedArtifactPackages, exportedArtifactResources);
     }
   }
 

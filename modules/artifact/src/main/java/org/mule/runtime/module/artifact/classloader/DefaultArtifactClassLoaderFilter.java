@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class DefaultArtifactClassLoaderFilter implements ArtifactClassLoaderFilter {
 
   public static final ArtifactClassLoaderFilter NULL_CLASSLOADER_FILTER =
-      new DefaultArtifactClassLoaderFilter(Collections.EMPTY_SET, Collections.EMPTY_SET);
+      new DefaultArtifactClassLoaderFilter("NULL", Collections.EMPTY_SET, Collections.EMPTY_SET);
 
   private static final char PACKAGE_SEPARATOR = '.';
   private static final String EMPTY_PACKAGE = "";
@@ -36,14 +36,16 @@ public class DefaultArtifactClassLoaderFilter implements ArtifactClassLoaderFilt
 
   private final Set<String> exportedClassPackages;
   private final Set<String> exportedResources;
+  private final String filterName;
 
   /**
    * Creates a new classLoader filter
-   *
+   * @param name
    * @param exportedClassPackages class package names to export. Can be empty
    * @param exportedResources resource file names to export. Can be empty
    */
-  public DefaultArtifactClassLoaderFilter(Set<String> exportedClassPackages, Set<String> exportedResources) {
+  public DefaultArtifactClassLoaderFilter(String name, Set<String> exportedClassPackages, Set<String> exportedResources) {
+    this.filterName = name;
     checkArgument(exportedClassPackages != null, "Exported class packages cannot be null");
     checkArgument(exportedResources != null, "Exported resource cannot be null");
 
@@ -79,7 +81,9 @@ public class DefaultArtifactClassLoaderFilter implements ArtifactClassLoaderFilt
     checkArgument(name != null, "Resource name cannot be null");
     final String sanitizeResourceName = sanitizeResourceName(name);
 
-    return exportedResources.contains(sanitizeResourceName);
+    boolean exported = exportedResources.contains(sanitizeResourceName);
+    System.out.println(filterName + " - exportsResource: " + exported + " : " + name);
+    return exported;
   }
 
   @Override

@@ -20,6 +20,7 @@ import org.mule.runtime.module.artifact.descriptor.ArtifactDescriptor;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -188,7 +189,7 @@ public class RegionClassLoader extends MuleDeployableArtifactClassLoader {
         }
       }
     }
-
+    System.out.println("REGION.findResource: " + name + " : " + resource);
     return resource;
   }
 
@@ -206,8 +207,12 @@ public class RegionClassLoader extends MuleDeployableArtifactClassLoader {
         }
       }
     }
+    CompoundEnumeration<URL> urlCompoundEnumeration = new CompoundEnumeration<>(enumerations.toArray(new Enumeration[0]));
 
-    return new CompoundEnumeration<>(enumerations.toArray(new Enumeration[0]));
+    ArrayList<URL> list = Collections.list(urlCompoundEnumeration);
+    System.out.println("REGION.findResources: " + name + " : " + list);
+
+    return new EnumerationAdapter<>(list);
   }
 
   @Override
@@ -237,6 +242,7 @@ public class RegionClassLoader extends MuleDeployableArtifactClassLoader {
     if (resource == null && getParent() instanceof LocalResourceLocator) {
       resource = ((LocalResourceLocator) getParent()).findLocalResource(resourceName);
     }
+    System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + resourceName);
     return resource;
   }
 

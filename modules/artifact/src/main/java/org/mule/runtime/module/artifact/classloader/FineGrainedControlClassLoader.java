@@ -22,6 +22,7 @@ import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -145,6 +146,7 @@ public class FineGrainedControlClassLoader extends URLClassLoader
 
       url = getParent().getResource(name);
     }
+    System.out.println("Classloader: " + this.getClass().getName() + " getResource: " + name + " : " + url);
     return url;
   }
 
@@ -156,7 +158,10 @@ public class FineGrainedControlClassLoader extends URLClassLoader
       tmp[1] = getParent().getResources(name);
     }
 
-    return new CompoundEnumeration<>(tmp);
+    CompoundEnumeration<URL> urlCompoundEnumeration = new CompoundEnumeration<>(tmp);
+    List<URL> list = Collections.list(urlCompoundEnumeration);
+    System.out.println("Classloader: " + this.getClass().getName() + " getResources: " + name + " : " + list);
+    return new EnumerationAdapter<>(list);
   }
 
   public Class<?> findLocalClass(String name) throws ClassNotFoundException {

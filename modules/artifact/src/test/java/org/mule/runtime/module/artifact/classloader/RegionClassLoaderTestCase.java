@@ -110,7 +110,7 @@ public class RegionClassLoaderTestCase extends AbstractMuleTestCase {
 
     regionClassLoader.addClassLoader(appClassLoader, NULL_CLASSLOADER_FILTER);
     regionClassLoader.addClassLoader(pluginClassLoader,
-                                     new DefaultArtifactClassLoaderFilter(singleton(PACKAGE_NAME), emptySet()));
+                                     new DefaultArtifactClassLoaderFilter(null, singleton(PACKAGE_NAME), emptySet()));
     pluginClassLoader.addClass(CLASS_NAME, PLUGIN_LOADED_CLASS);
     when(lookupPolicy.getLookupStrategy(Object.class.getName())).thenReturn(CHILD_FIRST);
     final Class loadedClass = regionClassLoader.loadClass(CLASS_NAME);
@@ -155,11 +155,11 @@ public class RegionClassLoaderTestCase extends AbstractMuleTestCase {
     RegionClassLoader regionClassLoader = new RegionClassLoader(ARTIFACT_ID, artifactDescriptor, parentClassLoader, lookupPolicy);
 
     appClassLoader.addResource(RESOURCE_NAME, APP_LOADED_RESOURCE);
-    regionClassLoader.addClassLoader(appClassLoader, new DefaultArtifactClassLoaderFilter(emptySet(), emptySet()));
+    regionClassLoader.addClassLoader(appClassLoader, new DefaultArtifactClassLoaderFilter(null, emptySet(), emptySet()));
 
     pluginClassLoader.addResource(RESOURCE_NAME, PLUGIN_LOADED_RESOURCE);
     regionClassLoader.addClassLoader(pluginClassLoader,
-                                     new DefaultArtifactClassLoaderFilter(emptySet(), singleton(RESOURCE_NAME)));
+                                     new DefaultArtifactClassLoaderFilter(null, emptySet(), singleton(RESOURCE_NAME)));
 
     URL resource = regionClassLoader.getResource(RESOURCE_NAME);
     Assert.assertThat(resource, CoreMatchers.equalTo(PLUGIN_LOADED_RESOURCE));
@@ -173,11 +173,12 @@ public class RegionClassLoaderTestCase extends AbstractMuleTestCase {
     RegionClassLoader regionClassLoader = new RegionClassLoader(ARTIFACT_ID, artifactDescriptor, parentClassLoader, lookupPolicy);
 
     appClassLoader.addResource(RESOURCE_NAME, APP_LOADED_RESOURCE);
-    regionClassLoader.addClassLoader(appClassLoader, new DefaultArtifactClassLoaderFilter(emptySet(), singleton(RESOURCE_NAME)));
+    regionClassLoader.addClassLoader(appClassLoader,
+                                     new DefaultArtifactClassLoaderFilter(null, emptySet(), singleton(RESOURCE_NAME)));
 
     pluginClassLoader.addResource(RESOURCE_NAME, APP_LOADED_RESOURCE);
     regionClassLoader.addClassLoader(pluginClassLoader,
-                                     new DefaultArtifactClassLoaderFilter(emptySet(), singleton(RESOURCE_NAME)));
+                                     new DefaultArtifactClassLoaderFilter(null, emptySet(), singleton(RESOURCE_NAME)));
 
     final Enumeration<URL> resources = regionClassLoader.getResources(RESOURCE_NAME);
 
@@ -286,7 +287,8 @@ public class RegionClassLoaderTestCase extends AbstractMuleTestCase {
 
     RegionClassLoader regionClassLoader = new RegionClassLoader(ARTIFACT_ID, artifactDescriptor, parentClassLoader, lookupPolicy);
     regionClassLoader.addClassLoader(appClassLoader, NULL_CLASSLOADER_FILTER);
-    regionClassLoader.addClassLoader(pluginClassLoader, new DefaultArtifactClassLoaderFilter(singleton("org.foo"), emptySet()));
+    regionClassLoader.addClassLoader(pluginClassLoader,
+                                     new DefaultArtifactClassLoaderFilter(null, singleton("org.foo"), emptySet()));
 
     expectedException.expect(IllegalArgumentException.class);
     expectedException.expectMessage(createCannotRemoveClassLoaderError(appClassLoader.getArtifactId()));
@@ -301,7 +303,7 @@ public class RegionClassLoaderTestCase extends AbstractMuleTestCase {
     RegionClassLoader regionClassLoader = new RegionClassLoader(ARTIFACT_ID, artifactDescriptor, parentClassLoader, lookupPolicy);
     regionClassLoader.addClassLoader(appClassLoader, NULL_CLASSLOADER_FILTER);
     regionClassLoader.addClassLoader(pluginClassLoader,
-                                     new DefaultArtifactClassLoaderFilter(emptySet(), singleton("META-INF/pom.xml")));
+                                     new DefaultArtifactClassLoaderFilter(null, emptySet(), singleton("META-INF/pom.xml")));
 
     expectedException.expect(IllegalArgumentException.class);
     expectedException.expectMessage(createCannotRemoveClassLoaderError(appClassLoader.getArtifactId()));

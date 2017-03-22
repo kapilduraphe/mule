@@ -11,7 +11,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mule.service.http.api.HttpConstants.HttpStatus.UNAUTHORIZED;
-
 import org.mule.functional.extensions.UsesHttpExtensionFunctionalTestCase;
 import org.mule.tck.junit4.rule.DynamicPort;
 
@@ -19,7 +18,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -53,38 +51,6 @@ public class HttpFilterFunctionalTestCase extends UsesHttpExtensionFunctionalTes
     } finally {
       get.releaseConnection();
     }
-  }
-
-  @Test
-  public void testAuthenticationFailureBadCredentials() throws Exception {
-    doRequest(null, "localhost", "anonX", "anonX", getUrl(), false, 401);
-  }
-
-  @Ignore // TODO Realm validataion seems to be completely ignored
-  @Test
-  public void testAuthenticationFailureBadRealm() throws Exception {
-    doRequest("blah", "localhost", "anon", "anon", getUrl(), false, 401);
-  }
-
-  @Test
-  public void testAuthenticationAuthorised() throws Exception {
-    doRequest(null, "localhost", "anon", "anon", getUrl(), false, 200);
-  }
-
-  @Test
-  public void testAuthenticationAuthorisedWithHandshake() throws Exception {
-    doRequest(null, "localhost", "anon", "anon", getUrl(), true, 200);
-  }
-
-  @Ignore // TODO Realm validataion seems to be completely ignored
-  @Test
-  public void testAuthenticationAuthorisedWithHandshakeAndBadRealm() throws Exception {
-    doRequest("blah", "localhost", "anon", "anon", getUrl(), true, 401);
-  }
-
-  @Test
-  public void testAuthenticationAuthorisedWithHandshakeAndRealm() throws Exception {
-    doRequest("mule-realm", "localhost", "ross", "ross", getUrl(), true, 200);
   }
 
   private void doRequest(String realm, String host, String user, String pass, String url, boolean handshake, int result)

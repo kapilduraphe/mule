@@ -31,10 +31,11 @@ public class ContainerClassLoaderFilterFactory {
   private static final String EMPTY_PACKAGE = "";
   private static final char RESOURCE_SEPARATOR = '/';
 
-  public ClassLoaderFilter create(Set<String> bootPackages, List<MuleModule> muleModules) {
+  public ClassLoaderFilter create(String name, Set<String> bootPackages, List<MuleModule> muleModules) {
     final Set<String> resources = getExportedResourcePaths(muleModules);
     final Set<String> packages = getModuleExportedPackages(muleModules);
-    final ArtifactClassLoaderFilter artifactClassLoaderFilter = new DefaultArtifactClassLoaderFilter(packages, resources);
+    final ArtifactClassLoaderFilter artifactClassLoaderFilter =
+        new DefaultArtifactClassLoaderFilter(name, packages, resources);
 
     return new ContainerClassLoaderFilter(artifactClassLoaderFilter, bootPackages);
   }
@@ -42,7 +43,7 @@ public class ContainerClassLoaderFilterFactory {
   private Set<String> getExportedResourcePaths(List<MuleModule> muleModules) {
     Set<String> resources = new HashSet<>();
     // Adds default SPI resource folder
-    resources.add("/META-INF/services");
+    //resources.add("/META-INF/services");
 
     for (MuleModule muleModule : muleModules) {
       resources.addAll(muleModule.getExportedPaths());
@@ -66,6 +67,8 @@ public class ContainerClassLoaderFilterFactory {
     public static final String RESOURCE_PACKAGE_SPLIT_REGEX = "/";
     private final ClassLoaderFilter moduleClassLoaderFilter;
     private final Set<String> bootPackages;
+    private static int count = 1;
+    private String containerrr = "CONTAINERRR" + count++;
 
     public ContainerClassLoaderFilter(ClassLoaderFilter moduleClassLoaderFilter, Set<String> bootPackages) {
       this.moduleClassLoaderFilter = moduleClassLoaderFilter;
@@ -94,6 +97,7 @@ public class ContainerClassLoaderFilterFactory {
         }
       }
 
+      System.out.println(containerrr + " - exportsResource: " + exported + " : " + name);
       return exported;
     }
 

@@ -135,7 +135,8 @@ public abstract class AbstractArtifactClassLoaderBuilder<T extends AbstractArtif
   protected abstract ArtifactClassLoader createArtifactClassLoader(String artifactId, RegionClassLoader regionClassLoader);
 
   private ArtifactClassLoaderFilter createClassLoaderFilter(ClassLoaderModel classLoaderModel) {
-    return new DefaultArtifactClassLoaderFilter(classLoaderModel.getExportedPackages(), classLoaderModel.getExportedResources());
+    return new DefaultArtifactClassLoaderFilter("SOMETHING", classLoaderModel.getExportedPackages(),
+                                                classLoaderModel.getExportedResources());
   }
 
   protected abstract String getArtifactId(ArtifactDescriptor artifactDescriptor);
