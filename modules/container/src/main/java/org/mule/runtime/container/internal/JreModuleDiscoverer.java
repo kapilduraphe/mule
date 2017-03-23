@@ -35,7 +35,6 @@ public class JreModuleDiscoverer implements ModuleDiscoverer {
 
   @Override
   public List<MuleModule> discover() {
-    // TODO(pablo.kraan): SPI - read the module's services
     return singletonList(new MuleModule(JRE_MODULE_NAME, loadJrePackages(), emptySet(), emptySet(), emptySet(), emptyList()));
   }
 
