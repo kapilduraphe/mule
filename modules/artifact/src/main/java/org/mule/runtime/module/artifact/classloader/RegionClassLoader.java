@@ -190,7 +190,8 @@ public class RegionClassLoader extends MuleDeployableArtifactClassLoader {
         }
       }
     }
-    System.out.println("REGION.findResource: " + name + " : " + resource);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("REGION.findResource: " + name + " : " + resource);
     return resource;
   }
 
@@ -211,7 +212,8 @@ public class RegionClassLoader extends MuleDeployableArtifactClassLoader {
     CompoundEnumeration<URL> urlCompoundEnumeration = new CompoundEnumeration<>(enumerations.toArray(new Enumeration[0]));
 
     ArrayList<URL> list = Collections.list(urlCompoundEnumeration);
-    System.out.println("REGION.findResources: " + name + " : " + list);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("REGION.findResources: " + name + " : " + list);
 
     return new EnumerationAdapter<>(list);
   }
@@ -243,7 +245,8 @@ public class RegionClassLoader extends MuleDeployableArtifactClassLoader {
     if (resource == null && getParent() instanceof LocalResourceLocator) {
       resource = ((LocalResourceLocator) getParent()).findLocalResource(resourceName);
     }
-    System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + resourceName);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + resourceName);
     return resource;
   }
 

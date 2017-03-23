@@ -30,6 +30,7 @@ public class ClasspathModuleDiscoverer implements ModuleDiscoverer {
   public static final String PRIVILEGED_EXPORTED_CLASS_PACKAGES_PROPERTY = "artifact.privileged.classPackages";
   public static final String PRIVILEGED_ARTIFACTS_PROPERTY = "artifact.privileged.artifacts";
   public static final String EXPORTED_RESOURCE_PROPERTY = "artifact.export.resources";
+  public static final String EXPORTED_SERVICES_PROPERTY = "artifact.export.services";
 
   private final ClassLoader classLoader;
 
@@ -66,9 +67,8 @@ public class ClasspathModuleDiscoverer implements ModuleDiscoverer {
     Set<String> modulePrivilegedPackages =
         getExportedPackageByProperty(moduleProperties, PRIVILEGED_EXPORTED_CLASS_PACKAGES_PROPERTY);
     Set<String> privilegedArtifacts = getPrivilegedArtifactIds(moduleProperties);
+    List<ExportedService> exportedServices = getExportedServices(moduleProperties, EXPORTED_SERVICES_PROPERTY);
 
-    // TODO(pablo.kraan): SPI - read the module's services
-    List<ExportedService> exportedServices = getExportedServices(moduleProperties, "artifact.export.services");
     return new MuleModule(moduleName, modulePackages, modulePaths, modulePrivilegedPackages, privilegedArtifacts,
                           exportedServices);
   }

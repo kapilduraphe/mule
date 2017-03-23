@@ -149,7 +149,8 @@ public class FineGrainedControlClassLoader extends URLClassLoader
 
       url = getParent().getResource(name);
     }
-    System.out.println("Classloader: " + this.name + " getResource: " + name + " : " + url);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("Classloader: " + this.name + " getResource: " + name + " : " + url);
     return url;
   }
 
@@ -163,7 +164,8 @@ public class FineGrainedControlClassLoader extends URLClassLoader
 
     CompoundEnumeration<URL> urlCompoundEnumeration = new CompoundEnumeration<>(tmp);
     List<URL> list = Collections.list(urlCompoundEnumeration);
-    System.out.println("Classloader: " + this.name + " getResources: " + name + " : " + list);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("Classloader: " + this.name + " getResources: " + name + " : " + list);
     return new EnumerationAdapter<>(list);
   }
 

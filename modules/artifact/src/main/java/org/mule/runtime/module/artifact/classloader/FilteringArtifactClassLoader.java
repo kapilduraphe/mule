@@ -31,6 +31,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Defines a {@link ClassLoader} that filter which classes and resources can be resolved based on a {@link ClassLoaderFilter}
+ * <p/>
+ * Resources used to provide SPI are not managed as standard resources, ie, not filtered through the {@link ClassLoaderFilter}, but
+ * filtered using {@link ExportedServiceProvider} definitions. Only the service providers defined as exported in the modules will be
+ * available from this class loader.
  */
 public class FilteringArtifactClassLoader extends ClassLoader implements ArtifactClassLoader {
 
@@ -49,14 +53,14 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
    * 
    * @param artifactClassLoader artifact classLoader to filter. Non null
    * @param filter filters access to classes and resources from the artifact classLoader. Non null
-   * @param exportedServiceProviders
+   * @param exportedServiceProviders service providers that will be available from the filtered class loader. Non null.
    */
   public FilteringArtifactClassLoader(ArtifactClassLoader artifactClassLoader, ClassLoaderFilter filter,
                                       List<ExportedServiceProvider> exportedServiceProviders) {
     checkArgument(artifactClassLoader != null, "ArtifactClassLoader cannot be null");
     checkArgument(filter != null, "Filter cannot be null");
-    // TODO(pablo.kraan): SPI - fix javadoc
-    // TODO(pablo.kraan): SPI - check arguments
+    checkArgument(exportedServiceProviders != null, "exportedServiceProviders cannot be null");
+
     this.artifactClassLoader = artifactClassLoader;
     this.filter = filter;
     this.exportedServiceProviders = exportedServiceProviders;
@@ -96,10 +100,12 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
     URL result = null;
     if (filter.exportsResource(name)) {
       URL resourceFromDelegate = getResourceFromDelegate(artifactClassLoader, name);
-      System.out.println("Artifact: " + this.getArtifactId() + " true exports: " + name + " : " + resourceFromDelegate);
+      // TODO(pablo.kraan): SPI - clean up logging
+      //System.out.println("Artifact: " + this.getArtifactId() + " true exports: " + name + " : " + resourceFromDelegate);
       result = resourceFromDelegate;
     } else {
-      System.out.println("Artifact: " + this.getArtifactId() + " false exports: " + name);
+      // TODO(pablo.kraan): SPI - clean up logging
+      //System.out.println("Artifact: " + this.getArtifactId() + " false exports: " + name);
       logClassloadingTrace(format("Resource '%s' not found in classloader for '%s'.", name, getArtifactId()));
       logClassloadingTrace(format("Filter applied for resource '%s': %s", name, getArtifactId()));
     }
@@ -126,7 +132,8 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
               .collect(Collectors.toList());
 
       if (!exportedServiceProviders.isEmpty()) {
-        System.out.println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICES FOUND AT: " + exportedServiceProviders);
+        // TODO(pablo.kraan): SPI - clean up logging
+        //System.out.println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICES FOUND AT: " + exportedServiceProviders);
         return new EnumerationAdapter<>(exportedServiceProviders);
       } else {
         System.out
@@ -137,11 +144,13 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
     if (filter.exportsResource(name)) {
       Enumeration<URL> resourcesFromDelegate = getResourcesFromDelegate(artifactClassLoader, name);
       List<URL> list = Collections.list(resourcesFromDelegate);
-      System.out.println("Artifact: " + this.getArtifactId() + " true exports: " + name + " : " + list);
+      // TODO(pablo.kraan): SPI - clean up logging
+      //System.out.println("Artifact: " + this.getArtifactId() + " true exports: " + name + " : " + list);
 
       return new EnumerationAdapter<>(list);
     } else {
-      System.out.println("Artifact: " + this.getArtifactId() + " false exports: " + name);
+      // TODO(pablo.kraan): SPI - clean up logging
+      //System.out.println("Artifact: " + this.getArtifactId() + " false exports: " + name);
       logClassloadingTrace(format("Resources '%s' not found in classloader for '%s'.", name, getArtifactId()));
       logClassloadingTrace(format("Filter applied for resources '%s': %s", name, getArtifactId()));
       return new EnumerationAdapter<>(emptyList());
@@ -217,7 +226,8 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
   @Override
   public URL findLocalResource(String resourceName) {
     URL localResource = artifactClassLoader.findLocalResource(resourceName);
-    System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + localResource);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + localResource);
     return localResource;
   }
 }

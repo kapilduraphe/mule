@@ -82,7 +82,8 @@ public class DefaultArtifactClassLoaderFilter implements ArtifactClassLoaderFilt
     final String sanitizeResourceName = sanitizeResourceName(name);
 
     boolean exported = exportedResources.contains(sanitizeResourceName);
-    System.out.println(filterName + " - exportsResource: " + exported + " : " + name);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println(filterName + " - exportsResource: " + exported + " : " + name);
     return exported;
   }
 

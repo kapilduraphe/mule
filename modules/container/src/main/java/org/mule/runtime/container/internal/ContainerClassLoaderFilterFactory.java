@@ -97,7 +97,8 @@ public class ContainerClassLoaderFilterFactory {
         }
       }
 
-      System.out.println(containerrr + " - exportsResource: " + exported + " : " + name);
+      // TODO(pablo.kraan): SPI - clean up logging
+      //System.out.println(containerrr + " - exportsResource: " + exported + " : " + name);
       return exported;
     }
 

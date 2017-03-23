@@ -88,7 +88,8 @@ public final class TestArtifactClassLoaderFilter implements ArtifactClassLoaderF
   @Override
   public boolean exportsResource(final String name) {
     boolean b = classLoaderFilter.exportsResource(name);
-    System.out.println(this.getClass().getName() + " exportsResource: " + b + " : " + name);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println(this.getClass().getName() + " exportsResource: " + b + " : " + name);
     return b;
   }
 

@@ -125,7 +125,8 @@ public class MuleArtifactClassLoader extends FineGrainedControlClassLoader imple
   @Override
   public URL findLocalResource(String resourceName) {
     URL localResource = getLocalResourceLocator().findLocalResource(resourceName);
-    System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + localResource);
+    // TODO(pablo.kraan): SPI - clean up logging
+    //System.out.println("Artifact: " + this.getArtifactId() + " findLocalResource: " + resourceName + " : " + localResource);
     return localResource;
   }
 
