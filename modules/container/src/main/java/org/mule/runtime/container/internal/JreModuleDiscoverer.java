@@ -7,6 +7,7 @@
 
 package org.mule.runtime.container.internal;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.mule.runtime.core.util.CollectionUtils.singletonList;
@@ -35,7 +36,7 @@ public class JreModuleDiscoverer implements ModuleDiscoverer {
   @Override
   public List<MuleModule> discover() {
     // TODO(pablo.kraan): SPI - read the module's services
-    return singletonList(new MuleModule(JRE_MODULE_NAME, loadJrePackages(), emptySet(), emptySet(), emptySet(), null));
+    return singletonList(new MuleModule(JRE_MODULE_NAME, loadJrePackages(), emptySet(), emptySet(), emptySet(), emptyList()));
   }
 
   private HashSet<String> loadJrePackages() {
