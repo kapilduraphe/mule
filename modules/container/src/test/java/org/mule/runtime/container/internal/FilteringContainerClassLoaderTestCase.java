@@ -27,7 +27,7 @@ public class FilteringContainerClassLoaderTestCase extends FilteringArtifactClas
 
   @Override
   protected FilteringArtifactClassLoader doCreateClassLoader() {
-    return new FilteringContainerClassLoader(artifactClassLoader, filter);
+    return new FilteringContainerClassLoader(artifactClassLoader, filter, null);
   }
 
   public FilteringContainerClassLoaderTestCase(boolean verboseClassloadingLog) {

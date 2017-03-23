@@ -44,13 +44,16 @@ public class FineGrainedControlClassLoader extends URLClassLoader
     registerAsParallelCapable();
   }
 
+  private final String name;
+
   protected Logger logger = LoggerFactory.getLogger(getClass());
 
   private final ClassLoaderLookupPolicy lookupPolicy;
   private final boolean verboseLogging;
 
-  public FineGrainedControlClassLoader(URL[] urls, ClassLoader parent, ClassLoaderLookupPolicy lookupPolicy) {
+  public FineGrainedControlClassLoader(URL[] urls, ClassLoader parent, ClassLoaderLookupPolicy lookupPolicy, String name) {
     super(urls, parent, new NonCachingURLStreamHandlerFactory());
+    this.name = name;
     checkArgument(lookupPolicy != null, "Lookup policy cannot be null");
     this.lookupPolicy = lookupPolicy;
     verboseLogging = logger.isDebugEnabled() || isVerboseLoggingEnabled();
@@ -146,7 +149,7 @@ public class FineGrainedControlClassLoader extends URLClassLoader
 
       url = getParent().getResource(name);
     }
-    System.out.println("Classloader: " + this.getClass().getName() + " getResource: " + name + " : " + url);
+    System.out.println("Classloader: " + this.name + " getResource: " + name + " : " + url);
     return url;
   }
 
@@ -160,7 +163,7 @@ public class FineGrainedControlClassLoader extends URLClassLoader
 
     CompoundEnumeration<URL> urlCompoundEnumeration = new CompoundEnumeration<>(tmp);
     List<URL> list = Collections.list(urlCompoundEnumeration);
-    System.out.println("Classloader: " + this.getClass().getName() + " getResources: " + name + " : " + list);
+    System.out.println("Classloader: " + this.name + " getResources: " + name + " : " + list);
     return new EnumerationAdapter<>(list);
   }
 

@@ -50,7 +50,7 @@ public class MuleArtifactClassLoader extends FineGrainedControlClassLoader imple
    */
   public MuleArtifactClassLoader(String artifactId, ArtifactDescriptor artifactDescriptor, URL[] urls, ClassLoader parent,
                                  ClassLoaderLookupPolicy lookupPolicy) {
-    super(urls, parent, lookupPolicy);
+    super(urls, parent, lookupPolicy, artifactId);
     checkArgument(!isEmpty(artifactId), "artifactId cannot be empty");
     checkArgument(artifactDescriptor != null, "artifactDescriptor cannot be null");
     this.artifactId = artifactId;

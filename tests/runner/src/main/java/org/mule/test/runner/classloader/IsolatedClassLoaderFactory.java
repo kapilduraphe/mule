@@ -129,7 +129,7 @@ public class IsolatedClassLoaderFactory {
         ArtifactClassLoaderFilter filter = createArtifactClassLoaderFilter(pluginUrlClassification);
 
         pluginArtifactClassLoaderFilters.add(filter);
-        filteredPluginsArtifactClassLoaders.add(new FilteringArtifactClassLoader(pluginCL, filter));
+        filteredPluginsArtifactClassLoaders.add(new FilteringArtifactClassLoader(pluginCL, filter, Collections.emptyList()));
       }
     }
 
@@ -235,7 +235,8 @@ public class IsolatedClassLoaderFactory {
 
     logClassLoaderUrls("CONTAINER", artifactsUrlClassification.getContainerUrls());
     return testContainerClassLoaderFactory
-        .createContainerClassLoader(new FilteringArtifactClassLoader(launcherArtifact, filteredClassLoaderLauncher));
+        .createContainerClassLoader(new FilteringArtifactClassLoader(launcherArtifact, filteredClassLoaderLauncher,
+                                                                     Collections.emptyList()));
   }
 
   /**

@@ -51,7 +51,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
     final ClassLoaderLookupPolicy lookupPolicy = mock(ClassLoaderLookupPolicy.class);
     when(lookupPolicy.getLookupStrategy(TEST_CLASS_NAME)).thenReturn(PARENT_ONLY);
     FineGrainedControlClassLoader ext =
-        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy);
+        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy, "UNKNOWN");
 
     assertEquals(EXPECTED_PARENT_MESSAGE, invokeTestClassMethod(ext));
   }
@@ -71,7 +71,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
                                       contains(sameInstance(thrownException))));
 
     FineGrainedControlClassLoader ext =
-        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy);
+        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy, "UNKNOWN");
 
     ext.loadClass(TEST_CLASS_NAME);
   }
@@ -84,7 +84,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
     when(lookupPolicy.getLookupStrategy(TEST_CLASS_NAME)).thenReturn(PARENT_FIRST);
 
     FineGrainedControlClassLoader ext =
-        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy);
+        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy, "UNKNOWN");
 
     assertEquals(EXPECTED_PARENT_MESSAGE, invokeTestClassMethod(ext));
   }
@@ -99,7 +99,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
     when(lookupPolicy.getLookupStrategy(String.class.getName())).thenReturn(PARENT_FIRST);
 
     FineGrainedControlClassLoader ext =
-        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy);
+        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy, "UNKNOWN");
 
     assertEquals(EXPECTED_CHILD_MESSAGE, invokeTestClassMethod(ext));
   }
@@ -134,7 +134,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
     when(lookupPolicy.getLookupStrategy(String.class.getName())).thenReturn(PARENT_ONLY);
 
     FineGrainedControlClassLoader ext =
-        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy);
+        new FineGrainedControlClassLoader(new URL[] {getChildFileResource()}, parent, lookupPolicy, "UNKNOWN");
 
     assertEquals(EXPECTED_CHILD_MESSAGE, invokeTestClassMethod(ext));
   }
@@ -146,7 +146,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
     final ClassLoaderLookupPolicy lookupPolicy = mock(ClassLoaderLookupPolicy.class);
     when(lookupPolicy.getLookupStrategy(TEST_CLASS_NAME)).thenReturn(PARENT_FIRST);
 
-    FineGrainedControlClassLoader ext = new FineGrainedControlClassLoader(new URL[0], parent, lookupPolicy);
+    FineGrainedControlClassLoader ext = new FineGrainedControlClassLoader(new URL[0], parent, lookupPolicy, "UNKNOWN");
 
     assertEquals(EXPECTED_PARENT_MESSAGE, invokeTestClassMethod(ext));
   }
@@ -173,7 +173,7 @@ public class FineGrainedControlClassLoaderTestCase extends AbstractMuleTestCase 
 
   protected FineGrainedControlClassLoader buildFineGrainedControlClassLoader(ClassLoader parent,
                                                                              final ClassLoaderLookupPolicy lookupPolicy) {
-    return new FineGrainedControlClassLoader(new URL[0], parent, lookupPolicy) {
+    return new FineGrainedControlClassLoader(new URL[0], parent, lookupPolicy, "UNKNOWN") {
 
       @Override
       public Class<?> findLocalClass(String name) throws ClassNotFoundException {

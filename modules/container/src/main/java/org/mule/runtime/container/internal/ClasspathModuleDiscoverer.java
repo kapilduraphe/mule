@@ -9,9 +9,11 @@ package org.mule.runtime.container.internal;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.mule.runtime.core.util.PropertiesUtils.discoverProperties;
+import org.mule.runtime.container.api.ExportedService;
 import org.mule.runtime.container.api.MuleModule;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +68,31 @@ public class ClasspathModuleDiscoverer implements ModuleDiscoverer {
     Set<String> privilegedArtifacts = getPrivilegedArtifactIds(moduleProperties);
 
     // TODO(pablo.kraan): SPI - read the module's services
-    return new MuleModule(moduleName, modulePackages, modulePaths, modulePrivilegedPackages, privilegedArtifacts, null);
+    List<ExportedService> exportedServices = getExportedServices(moduleProperties, "artifact.export.services");
+    return new MuleModule(moduleName, modulePackages, modulePaths, modulePrivilegedPackages, privilegedArtifacts,
+                          exportedServices);
+  }
+
+  private List<ExportedService> getExportedServices(Properties moduleProperties, String exportedServicesProperty) {
+    final String privilegedExportedPackagesProperty = (String) moduleProperties.get(exportedServicesProperty);
+    List<ExportedService> exportedServices;
+    if (!isEmpty(privilegedExportedPackagesProperty)) {
+      exportedServices = getServicesFromProperty(privilegedExportedPackagesProperty);
+    } else {
+      exportedServices = new ArrayList<>();
+    }
+    return exportedServices;
+  }
+
+  private List<ExportedService> getServicesFromProperty(String privilegedExportedPackagesProperty) {
+    List<ExportedService> exportedServices = new ArrayList<>();
+
+    for (String exportedServiceDefinition : privilegedExportedPackagesProperty.split(",")) {
+      String[] split = exportedServiceDefinition.split(":");
+      exportedServices.add(new ExportedService(split[0], split[1]));
+    }
+
+    return exportedServices;
   }
 
   private Set<String> getPrivilegedArtifactIds(Properties moduleProperties) {

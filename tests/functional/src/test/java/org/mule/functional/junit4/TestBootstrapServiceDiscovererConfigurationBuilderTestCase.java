@@ -26,6 +26,7 @@ import org.mule.tck.junit4.AbstractMuleContextTestCase;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class TestBootstrapServiceDiscovererConfigurationBuilderTestCase extends 
       final ArtifactClassLoader pluginClassLoader1 = mock(ArtifactClassLoader.class);
       when(pluginClassLoader1.getClassLoader()).thenReturn(this.getClass().getClassLoader());
       final List<ArtifactClassLoader> artifactClassLoaders = new ArrayList<>();
-      artifactClassLoaders.add(new FilteringArtifactClassLoader(pluginClassLoader1, filter));
+      artifactClassLoaders.add(new FilteringArtifactClassLoader(pluginClassLoader1, filter, Collections.emptyList()));
 
       final List<URL> urls = new ArrayList<>();
       urls.add(this.getClass().getResource("/plugin1-bootstrap.properties"));
@@ -67,7 +68,7 @@ public class TestBootstrapServiceDiscovererConfigurationBuilderTestCase extends 
       final ArtifactClassLoader appClassLoader = mock(ArtifactClassLoader.class);
       when(appClassLoader.getClassLoader()).thenReturn(this.getClass().getClassLoader());
       when(appClassLoader.findResources(BOOTSTRAP_PROPERTIES)).thenReturn(new EnumerationAdapter<URL>(emptyList()));
-      final ClassLoader executionClassLoader = new FilteringArtifactClassLoader(appClassLoader, filter);
+      final ClassLoader executionClassLoader = new FilteringArtifactClassLoader(appClassLoader, filter, Collections.emptyList());
       return new TestBootstrapServiceDiscovererConfigurationBuilder(getClass().getClassLoader(), executionClassLoader,
                                                                     artifactClassLoaders);
     } catch (IOException e) {

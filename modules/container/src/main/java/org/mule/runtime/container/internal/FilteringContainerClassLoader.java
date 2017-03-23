@@ -9,11 +9,13 @@ package org.mule.runtime.container.internal;
 
 import org.mule.runtime.module.artifact.classloader.ArtifactClassLoader;
 import org.mule.runtime.module.artifact.classloader.ClassLoaderFilter;
+import org.mule.runtime.module.artifact.classloader.ExportedServiceProvider;
 import org.mule.runtime.module.artifact.classloader.FilteringArtifactClassLoader;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Filtering artifact classLoader that to use as the parent classloader for all mule tops artifact (domains, server plugins, etc).
@@ -32,9 +34,11 @@ public class FilteringContainerClassLoader extends FilteringArtifactClassLoader 
    *
    * @param containerClassLoader delegate classLoader. Not null.
    * @param filter filter used to determine which classes and resources are exported on the delegate classLoader.
+   * @param exportedServiceProviders
    */
-  public FilteringContainerClassLoader(ArtifactClassLoader containerClassLoader, ClassLoaderFilter filter) {
-    super(containerClassLoader, filter);
+  public FilteringContainerClassLoader(ArtifactClassLoader containerClassLoader, ClassLoaderFilter filter,
+                                       List<ExportedServiceProvider> exportedServiceProviders) {
+    super(containerClassLoader, filter, exportedServiceProviders);
   }
 
   @Override

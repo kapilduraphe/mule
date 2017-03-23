@@ -12,6 +12,7 @@ import static org.mule.runtime.api.util.Preconditions.checkArgument;
 
 import org.mule.runtime.core.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public class MuleModule {
     this.exportedPaths = unmodifiableSet(exportedPaths);
     this.privilegedExportedPackages = privilegedExportedPackages;
     this.privilegedArtifacts = privilegedArtifacts;
-    this.exportedServices = exportedServices;
+    this.exportedServices = exportedServices != null ? exportedServices : Collections.emptyList();
   }
 
   public String getName() {

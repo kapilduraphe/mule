@@ -9,11 +9,14 @@ package org.mule.runtime.container.internal;
 
 import static org.mule.runtime.api.util.Preconditions.checkArgument;
 import static org.mule.runtime.module.artifact.classloader.ParentFirstLookupStrategy.PARENT_FIRST;
+import org.mule.runtime.container.api.ExportedService;
 import org.mule.runtime.container.api.ModuleRepository;
 import org.mule.runtime.container.api.MuleModule;
+import org.mule.runtime.core.util.FileUtils;
 import org.mule.runtime.module.artifact.classloader.ArtifactClassLoader;
 import org.mule.runtime.module.artifact.classloader.ClassLoaderLookupPolicy;
 import org.mule.runtime.module.artifact.classloader.EnumerationAdapter;
+import org.mule.runtime.module.artifact.classloader.ExportedServiceProvider;
 import org.mule.runtime.module.artifact.classloader.FilteringArtifactClassLoader;
 import org.mule.runtime.module.artifact.classloader.LookupStrategy;
 import org.mule.runtime.module.artifact.classloader.MuleArtifactClassLoader;
@@ -21,8 +24,10 @@ import org.mule.runtime.module.artifact.descriptor.ArtifactDescriptor;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -194,7 +199,32 @@ public class ContainerClassLoaderFactory {
                                                                              ArtifactClassLoader containerClassLoader) {
     return new FilteringContainerClassLoader(containerClassLoader,
                                              new ContainerClassLoaderFilterFactory().create("CONTAINER", getBootPackages(),
-                                                                                            muleModules));
+                                                                                            muleModules),
+                                             createExportedServices(muleModules));
+  }
+
+  private List<ExportedServiceProvider> createExportedServices(List<MuleModule> muleModules) {
+
+    List<ExportedServiceProvider> exportedServiceProviders = new ArrayList<>();
+
+    for (MuleModule muleModule : muleModules) {
+      for (ExportedService exportedService : muleModule.getExportedServices()) {
+        // TODO(pablo.kraan): SPI - find a better place to store those files
+        // TODO(pablo.kraan): SPI - avoid name collision in temp files
+        // TODO(pablo.kraan): SPI - check if file must contain the META-INF/services prefix
+        File serviceFile = new File("/tmp/META-INF/services/" + exportedService.getServiceInterface());
+        try {
+          FileUtils.write(serviceFile, exportedService.getServiceImplementation());
+          exportedServiceProviders
+              .add(new ExportedServiceProvider(exportedService.getServiceInterface(), serviceFile.toURI().toURL()));
+        } catch (IOException e) {
+          // TODO(pablo.kraan): SPI - improve error management
+          throw new RuntimeException(e);
+        }
+      }
+    }
+
+    return exportedServiceProviders;
   }
 
   /**

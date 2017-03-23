@@ -85,7 +85,7 @@ public class FilteringArtifactClassLoaderTestCase extends AbstractMuleTestCase {
   }
 
   protected FilteringArtifactClassLoader doCreateClassLoader() {
-    return new FilteringArtifactClassLoader(artifactClassLoader, filter);
+    return new FilteringArtifactClassLoader(artifactClassLoader, filter, Collections.emptyList());
   }
 
   @Test
