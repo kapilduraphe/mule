@@ -7,13 +7,27 @@
 
 package org.mule.runtime.container.api;
 
-// TODO(pablo.kraan): SPI - add javadocs
+import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.mule.runtime.api.util.Preconditions.checkArgument;
+
+/**
+ * Defines a service that will be exported by a module to other Mule artifacts via SPI.
+ */
 public class ExportedService {
 
   private final String serviceInterface;
   private final String serviceImplementation;
 
+  /**
+   * Create a new service
+   *
+   * @param serviceInterface fully qualified name of the interface that defines the service to be located using SPI. Non empty.
+   * @param serviceImplementation fully qualified name of the class implementing the service. Non empty.
+   */
   public ExportedService(String serviceInterface, String serviceImplementation) {
+    checkArgument(!isEmpty(serviceInterface), "serviceInterface cannot be empty");
+    checkArgument(!isEmpty(serviceImplementation), "serviceImplementation cannot be empty");
+
     this.serviceInterface = serviceInterface;
     this.serviceImplementation = serviceImplementation;
   }
