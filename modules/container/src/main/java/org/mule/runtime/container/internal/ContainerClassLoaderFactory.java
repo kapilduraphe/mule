@@ -7,12 +7,12 @@
 
 package org.mule.runtime.container.internal;
 
+import static org.apache.commons.io.FileUtils.writeLines;
 import static org.mule.runtime.api.util.Preconditions.checkArgument;
 import static org.mule.runtime.module.artifact.classloader.ParentFirstLookupStrategy.PARENT_FIRST;
 import org.mule.runtime.container.api.ExportedService;
 import org.mule.runtime.container.api.ModuleRepository;
 import org.mule.runtime.container.api.MuleModule;
-import org.mule.runtime.core.util.FileUtils;
 import org.mule.runtime.module.artifact.classloader.ArtifactClassLoader;
 import org.mule.runtime.module.artifact.classloader.ClassLoaderLookupPolicy;
 import org.mule.runtime.module.artifact.classloader.EnumerationAdapter;
@@ -207,20 +207,32 @@ public class ContainerClassLoaderFactory {
 
     List<ExportedServiceProvider> exportedServiceProviders = new ArrayList<>();
 
+    Map<String, List<String>> exportedServices = new HashMap<>();
+
     for (MuleModule muleModule : muleModules) {
       for (ExportedService exportedService : muleModule.getExportedServices()) {
-        // TODO(pablo.kraan): SPI - find a better place to store those files
-        // TODO(pablo.kraan): SPI - avoid name collision in temp files
-        // TODO(pablo.kraan): SPI - check if file must contain the META-INF/services prefix
-        File serviceFile = new File("/tmp/META-INF/services/" + exportedService.getServiceInterface());
-        try {
-          FileUtils.write(serviceFile, exportedService.getServiceImplementation());
-          exportedServiceProviders
-              .add(new ExportedServiceProvider(exportedService.getServiceInterface(), serviceFile.toURI().toURL()));
-        } catch (IOException e) {
-          // TODO(pablo.kraan): SPI - improve error management
-          throw new RuntimeException(e);
+        List<String> serviceImplementations = exportedServices.get(exportedService.getServiceInterface());
+
+        if (serviceImplementations == null) {
+          serviceImplementations = new ArrayList<>();
+          exportedServices.put(exportedService.getServiceInterface(), serviceImplementations);
         }
+
+        serviceImplementations.add(exportedService.getServiceImplementation());
+      }
+    }
+
+    for (String interfaceName : exportedServices.keySet()) {
+      // TODO(pablo.kraan): SPI - find a better place to store those files
+      File serviceFile = new File("/tmp/moncho" + interfaceName);
+      try {
+        writeLines(serviceFile, exportedServices.get(interfaceName));
+
+        exportedServiceProviders
+            .add(new ExportedServiceProvider(interfaceName, serviceFile.toURI().toURL()));
+      } catch (IOException e) {
+        // TODO(pablo.kraan): SPI - improve error management
+        throw new RuntimeException(e);
       }
     }
 
