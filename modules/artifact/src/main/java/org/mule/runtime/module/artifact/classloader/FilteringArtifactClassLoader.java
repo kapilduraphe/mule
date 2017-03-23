@@ -83,7 +83,6 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
     if (name.contains(servicePath)) {
       String serviceInterface = name.substring(name.indexOf(servicePath) + servicePath.length());
 
-      //System.out.println("ZARAZA getResource for service: " + serviceInterface);
       Optional<ExportedServiceProvider> serviceProvider =
           exportedServiceProviders.stream().filter(s -> serviceInterface.equals(s.getServiceInterface())).findFirst();
 
@@ -91,10 +90,12 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
         System.out
             .println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICE FOUND AT: " + serviceProvider.get().getResource());
         return serviceProvider.get().getResource();
-      } else {
-        System.out
-            .println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICE NOT FOUND RETRYING WITH STANDARD RESOURCE LOOKUP");
       }
+      // TODO(pablo.kraan): SPI - clean up logging
+      //else {
+      //  System.out
+      //      .println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICE NOT FOUND RETRYING WITH STANDARD RESOURCE LOOKUP");
+      //}
     }
 
     URL result = null;
@@ -135,10 +136,12 @@ public class FilteringArtifactClassLoader extends ClassLoader implements Artifac
         // TODO(pablo.kraan): SPI - clean up logging
         //System.out.println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICES FOUND AT: " + exportedServiceProviders);
         return new EnumerationAdapter<>(exportedServiceProviders);
-      } else {
-        System.out
-            .println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICES NOT FOUND RETRYING WITH STANDARD RESOURCE LOOKUP");
       }
+      // TODO(pablo.kraan): SPI - clean up logging
+      //else {
+      //  System.out
+      //      .println("Artifact: " + this.getArtifactId() + "EXPORTED SERVICES NOT FOUND RETRYING WITH STANDARD RESOURCE LOOKUP");
+      //}
     }
 
     if (filter.exportsResource(name)) {

@@ -7,6 +7,8 @@
 
 package org.mule.runtime.container.internal;
 
+import static java.io.File.createTempFile;
+import static java.lang.String.format;
 import static org.apache.commons.io.FileUtils.writeLines;
 import static org.mule.runtime.api.util.Preconditions.checkArgument;
 import static org.mule.runtime.module.artifact.classloader.ParentFirstLookupStrategy.PARENT_FIRST;
@@ -223,16 +225,13 @@ public class ContainerClassLoaderFactory {
     }
 
     for (String interfaceName : exportedServices.keySet()) {
-      // TODO(pablo.kraan): SPI - find a better place to store those files
-      File serviceFile = new File("/tmp/moncho" + interfaceName);
       try {
+        File serviceFile = createTempFile(interfaceName, "tmp");
         writeLines(serviceFile, exportedServices.get(interfaceName));
 
-        exportedServiceProviders
-            .add(new ExportedServiceProvider(interfaceName, serviceFile.toURI().toURL()));
+        exportedServiceProviders.add(new ExportedServiceProvider(interfaceName, serviceFile.toURI().toURL()));
       } catch (IOException e) {
-        // TODO(pablo.kraan): SPI - improve error management
-        throw new RuntimeException(e);
+        throw new IllegalStateException(format("Error creating temporary service provider file for '%s'", interfaceName), e);
       }
     }
 
