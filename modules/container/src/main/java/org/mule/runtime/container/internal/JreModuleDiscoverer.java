@@ -35,6 +35,7 @@ public class JreModuleDiscoverer implements ModuleDiscoverer {
 
   @Override
   public List<MuleModule> discover() {
+    // TODO(pablo.kraan): MULE-12050: find services exported by the JRE
     return singletonList(new MuleModule(JRE_MODULE_NAME, loadJrePackages(), emptySet(), emptySet(), emptySet(), emptyList()));
   }
 

@@ -91,7 +91,9 @@ public class ContainerClassLoaderFactory {
                       // mule-module.properties (fails ClassInterceptorTestCase)
                       "org.aopalliance.aop",
                       // MULE-10194 Mechanism to add custom boot packages to be exported by the container
-                      "com.yourkit");
+                      "com.yourkit",
+                      // TODO(pablo.kraan): MULE-12049 - find a better way to export Nashorn without having to use a boot package
+                      "jdk.nashorn.api.scripting");
 
   private final ModuleRepository moduleRepository;
 
