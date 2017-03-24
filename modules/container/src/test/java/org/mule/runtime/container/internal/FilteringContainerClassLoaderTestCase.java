@@ -7,6 +7,7 @@
 
 package org.mule.runtime.container.internal;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -27,7 +28,7 @@ public class FilteringContainerClassLoaderTestCase extends FilteringArtifactClas
 
   @Override
   protected FilteringArtifactClassLoader doCreateClassLoader() {
-    return new FilteringContainerClassLoader(artifactClassLoader, filter, null);
+    return new FilteringContainerClassLoader(artifactClassLoader, filter, emptyList());
   }
 
   public FilteringContainerClassLoaderTestCase(boolean verboseClassloadingLog) {
